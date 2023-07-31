@@ -12,96 +12,93 @@ Most of these macros improve basic functionality (e.g. [selectable build sheets
 ](#bed-surface)) and Klipper compatability with g-code targeting Marlin
 printers. However, there are also some nice extras:
 
-* **[Schedule commands at heights and layer changes](#layer-triggers)** -
+- **[Schedule commands at heights and layer changes](#layer-triggers)** -
   This is similar to what your slicer can already do, but I find it simpler, and
   you can schedule these commands while a print is active. As an example of
   usage, I added an [LCD menu item](#lcd-menus) to pause the print at the next
   layer change. This way the pause won't mar the print by e.g. pausing inside
   an external perimeter.
-* **Dynamically scale [heaters](#heaters) and [fans](#fans)** - This makes it
+- **Dynamically scale [heaters](#heaters) and [fans](#fans)** - This makes it
   easy to do things like persistently adjust fan settings during a live print,
   or maintain simpler slicer profiles by moving things like a heater bump for a
   hardened steel nozzle into state stored on the printer.
-* **Cleaner [LCD menu interface](#lcd-menus)** - I've simplified the menus and
+- **Cleaner [LCD menu interface](#lcd-menus)** - I've simplified the menus and
   provided a much easier way to customize materials in the LCD menu (or at least
   I think so). I've also added confirmation dialogs for commands that would
   abort an active print.
-* **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within
+- **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within
   the printed area, which can save a lot of time on smaller prints.
-* **[Automated purge lines](#draw_purge_line)** - Set the desired extrusion
+- **[Automated purge lines](#draw_purge_line)** - Set the desired extrusion
   length as `variable_start_purge_length` in your config and a correctly sized
   set of purge lines will be extruded in front of the print area immediately
   before the print starts.
 
 ## A few warnings...
 
-* **BACK UP YOUR FULL CONFIG BEFORE MAKING ANY CHANGES!!!** I've seen so many
+- **BACK UP YOUR FULL CONFIG BEFORE MAKING ANY CHANGES!!!** I've seen so many
   newcomers desperately looking for help on public forums because they didn't
   have a good config to fall back to after messing up their current config while
   experimenting with other people's macros. You'll save yourself and everyone
   else a whole lot of time and nuisance if you just make sure you always have a
   working config backed up.
-* **You really should avoid custom macros like this until you're comfortable
+- **You really should avoid custom macros like this until you're comfortable
   using Klipper with a basic config.** Advanced Klipper macros tend to rely
   extensively on [monkey patching](https://en.wikipedia.org/wiki/Monkey_patch),
   which can lead to problems with unusual configurations or when mixing macros
   from various sources. So, you really want to know what you're doing before
   including someone else's macros—particularly when including macros with
   overlapping functionality from different sources.
-* You must have a `heater_bed`, `extruder`, and other [sections listed
-  below](#klipper-setup) configured, otherwise the macros will ***force a
-  printer shutdown at startup***. Unfortunately, the Klipper macro system
+- You must have a `heater_bed`, `extruder`, and other [sections listed
+  below](#klipper-setup) configured, otherwise the macros will **_force a
+  printer shutdown at startup_**. Unfortunately, the Klipper macro system
   doesn't have a more graceful way of handling this sort of thing.
-* The multi-extruder and chamber heater functionality is very under-tested and
+- The multi-extruder and chamber heater functionality is very under-tested and
   may have bugs, since I haven't used it much at all. Patches welcome.
-* There's probably other stuff I haven't used enough to test thoroughly, so use
+- There's probably other stuff I haven't used enough to test thoroughly, so use
   these macros at your own risk.
 
 # Troubleshooting
 
-* Double check that you followed the [installation instructions](#installation)
+- Double check that you followed the [installation instructions](#installation)
   and are not seeing any console or log errors.
-* Ensure that you're running the most current version of stock Klipper, and not
+- Ensure that you're running the most current version of stock Klipper, and not
   a fork or otherwise altered or outdated copy.
-* Ensure you're using the most current version of these macros and haven't
+- Ensure you're using the most current version of these macros and haven't
   made changes to any files in the `klipper-macros` directory.
-* Ensure that you've restarted Klipper after any updates or config changes.
-* Run `CHECK_KM_CONFIG` in the Klipper console and fix any errors it reports
+- Ensure that you've restarted Klipper after any updates or config changes.
+- Run `CHECK_KM_CONFIG` in the Klipper console and fix any errors it reports
   to the console and/or logs (it won't output anything if no config errors
   were detected).
-* Run `_INIT_SURFACES` in the Klipper console to validate that bed surfaces are
+- Run `_INIT_SURFACES` in the Klipper console to validate that bed surfaces are
   being initialized without any errors reported to the console and/or logs.
-* Verify your slicer settings and review that the gcode output is correct. Pay
+- Verify your slicer settings and review that the gcode output is correct. Pay
   particular attention the initialization portions of the gcode and the
   parameters passed to PRINT_START.
-* Look for similar issues and post troubleshooting questions in the [Github Q&A
-  Discussion](
-  https://github.com/jschuh/klipper-macros/discussions/categories/q-a).
+- Look for similar issues and post troubleshooting questions in the [Github Q&A
+  Discussion](https://github.com/jschuh/klipper-macros/discussions/categories/q-a).
 
 # Reporting Bugs
 
 If you've followed the troubleshooting steps and were unable to resolve the
-issue you can [report a bug via Github](
-https://github.com/jschuh/klipper-macros/issues/new/choose). I will probably
+issue you can [report a bug via Github](https://github.com/jschuh/klipper-macros/issues/new/choose). I will probably
 respond within a few days (almost certainly within a week). I probably won't
 respond through other channels (e.g. Discord, Twitter), because I don't find
 them useful for handling bug reports.
 
 Some important things to remember when reporting bugs:
 
-* **Paste the full text of the command that triggered the error, along with any
+- **Paste the full text of the command that triggered the error, along with any
   error messages printed to the console** and relevant sections of the klipper
   logs if appropriate (and please [format this text as code](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#quoting-code),
   otherwise Github will format it like a ransom note).
-* **Attach your config to the bug report.** There's generally no way to diagnose
+- **Attach your config to the bug report.** There's generally no way to diagnose
   anything without the configs.
-* **Verify that your issue reproduces on the current, stock installation of
+- **Verify that your issue reproduces on the current, stock installation of
   Klipper and klipper-macros.** Non-stock configurations and outdated versions
   make diagnosis nearly impossible.
-* Please don't treat bug reports as a substitute for following the installation
+- Please don't treat bug reports as a substitute for following the installation
   and troubleshooting instructions.
-* Please direct feature requests to the [Github Ideas Discussion](
-  https://github.com/jschuh/klipper-macros/discussions/categories/ideas).
+- Please direct feature requests to the [Github Ideas Discussion](https://github.com/jschuh/klipper-macros/discussions/categories/ideas).
 
 > **Note:** Reports that do not follow the above guidelines _**will likely be
 > closed without any other action taken.**_
@@ -117,25 +114,25 @@ interested in or just looks like it would be a hassle for me to maintain.
 There's no standard style for Klipper macros, so please just try to follow the
 style in the files. That stated, here are a few rules to remember:
 
- * Wrap at 80 characters if at all possible
- * Indent 2 spaces, and in line with the logical block when wrapping (no tabs)
- * Prefix internal macros with `_` or `_km_`
- * Prefix any sort of global state with `_KM_` (e.g. `_KM_SAVE_GCODE_STATE`)
+- Wrap at 80 characters if at all possible
+- Indent 2 spaces, and in line with the logical block when wrapping (no tabs)
+- Prefix internal macros with `_` or `_km_`
+- Prefix any sort of global state with `_KM_` (e.g. `_KM_SAVE_GCODE_STATE`)
 
 ## Commit Messages
 
 These are the rules for commit messages, but you can also just look at the
 commit log and follow the observed pattern:
 
- * Use the 50/72 rule for commit messages: No more than 50 characters in the
-   title and break lines in the description at 72 characters.
- * Begin the title with the module name (usually the main file being modified,
-   minus any extension) followed by a colon.
- * Title-only commit messages are fine for simple commits, but be sure to
-   include a blank line after the title.
- * Squash multiple commits if what you're working on makes more sense as a
-   single logical commit. _This might require you to do a force push on an open
-   PR._
+- Use the 50/72 rule for commit messages: No more than 50 characters in the
+  title and break lines in the description at 72 characters.
+- Begin the title with the module name (usually the main file being modified,
+  minus any extension) followed by a colon.
+- Title-only commit messages are fine for simple commits, but be sure to
+  include a blank line after the title.
+- Squash multiple commits if what you're working on makes more sense as a
+  single logical commit. _This might require you to do a force push on an open
+  PR._
 
 # Installation
 
@@ -158,7 +155,7 @@ section. _**Do not directly modify the variable declarations in globals.cfg.**_
 The macro initialization assumes certain default values, and direct
 modifications are likely to break things in very unexpected ways.
 
-> **Note:**  The paths in this README follow [Moonraker's data folder structure.
+> **Note:** The paths in this README follow [Moonraker's data folder structure.
 > ](https://moonraker.readthedocs.io/en/latest/installation/#data-folder-structure)
 > You may need to change them if you are using a different structure.
 
@@ -168,13 +165,13 @@ modifications are likely to break things in very unexpected ways.
 > [fluidd](https://docs.fluidd.xyz/configuration/initial_setup#macros) macros).
 > As a rule, you should avoid using multiple sets of macros that override the
 > same base macro (unless you really know what you're doing) because conflicting
-> macros can cause all sorts of weird and frustrating problems. 
+> macros can cause all sorts of weird and frustrating problems.
 
 > **Note:** If you have a `[homing_override]` section you will need to update
 > any `G28` commands in the gcode part to use `G28.6245197` instead (which is
 > the renamed version of Klipper's built-in `G28`). Failure to do this will
-> cause `G28` commands to error out with the message ***Macro G28 called
-> recursively***.
+> cause `G28` commands to error out with the message **_Macro G28 called
+> recursively_**.
 
 # Klipper Setup
 
@@ -257,7 +254,7 @@ _PRINT_START_PHASE_EXTRUDER
 _PRINT_START_PHASE_PURGE
 
 ; This is the place to put slicer purge lines if you haven't set a non-zero
-; variable_start_purge_length to have START_PRINT automatically calculate and 
+; variable_start_purge_length to have START_PRINT automatically calculate and
 ; perform the purge (e.g. if using a Mosaic Palette, which requires the slicer
 ; to generate the purge).
 ```
@@ -310,15 +307,15 @@ issues:
   currently raised. This means height based gcode triggers may fire earlier than
   expected.
 - Cura's **Insert at layer change** fires the `After` trigger and then the
-  `Before` trigger (i.e before or after the *layer*, versus before or after the
-  *layer change*). These macros and PrusaSlicer do the opposite, which is
+  `Before` trigger (i.e before or after the _layer_, versus before or after the
+  _layer change_). These macros and PrusaSlicer do the opposite, which is
   something to keep in mind if you're used to how Cura does it. Note that these
-  macros do use an  **Insert at layer change** script to force `LAYER` comment
+  macros do use an **Insert at layer change** script to force `LAYER` comment
   generation, but that doesn't affect the trigger ordering.
 - Cura does not provide the first layer bounding rectangle, only the model
   bounding volume. This means the XY bounding box used to speed up mesh probing
   may be larger than it needs to be, resulting in bed probing that's not as fast
-  as it could be. 
+  as it could be.
 
 Accepting the caveats, the macros work quite well with Cura if you follow the
 configuration steps listed below.
@@ -339,7 +336,7 @@ _PRINT_START_PHASE_EXTRUDER
 _PRINT_START_PHASE_PURGE
 
 ; This is the place to put slicer purge lines if you haven't set a non-zero
-; variable_start_purge_length to have START_PRINT automatically calculate and 
+; variable_start_purge_length to have START_PRINT automatically calculate and
 ; perform the purge (e.g. if using a Mosaic Palette, which requires the slicer
 ; to generate the purge).
 ```
@@ -353,9 +350,9 @@ PRINT_END
 #### Post Processing Plugin
 
 Use the menu item for **Extensions → Post Processing → Modify G-Code** to
-open the **Post Processing Plugin** and add the following four scripts. *The
+open the **Post Processing Plugin** and add the following four scripts. _The
 scripts must be run in the order listed below and be sure to copy the strings
-exactly, with no leading or trailing spaces.*
+exactly, with no leading or trailing spaces._
 
 ##### Search and Replace
 
@@ -410,9 +407,9 @@ installation steps. However, the most critical parts are listed below.
 Ensure that you remove the following from your Klipper config (and any included
 configs):
 
-* The full `[gcode_macro _km_options]` section
-* Any `include` sections with `klipper-macros` in the path
-* `_KM_IDLE_TIMEOUT` in the `[idle_timeout]` section
+- The full `[gcode_macro _km_options]` section
+- Any `include` sections with `klipper-macros` in the path
+- `_KM_IDLE_TIMEOUT` in the `[idle_timeout]` section
 
 If you do not have Moonraker autoupdates configured you can delete the
 `klipper-macros` directory with something like the following command (adjusted
@@ -426,7 +423,7 @@ rm -rf ~/printer_data/config/klipper-macros
 
 If you do not want to change your slicer config, you should be able to leave
 it as is, because it generates only a small amount of additional gcode, and the
-basic parameters should work with any other `PRINT_START` macros. 
+basic parameters should work with any other `PRINT_START` macros.
 
 ## Moonraker Configuration Removal
 
@@ -440,12 +437,12 @@ restarts before the klipper-macros section disappears from the UI.
 
 ## Customization
 
-All features are configured by setting `variable_` values in the 
+All features are configured by setting `variable_` values in the
 `[gcode_macro _km_options]` section. All available variables and their purpose
 are listed in [globals.cfg](globals.cfg#L5).
 
 > **Note:** `PRINT_START` specific customizations are [covered in more detail
-  below](#print-start-and-end).
+> below](#print-start-and-end).
 
 ### Bed Mesh Improvements
 
@@ -461,29 +458,29 @@ calibration (so long as a `[bed_mesh]` section is detected in your config).
 The following additional configuration options are available from
 [globals.cfg](globals.cfg#L5).
 
-* `variable_probe_mesh_padding` - Extra padding around the rectangle defined by
+- `variable_probe_mesh_padding` - Extra padding around the rectangle defined by
   `MESH_MIN` and `MESH_MAX`.
-* `variable_probe_min_count` - Minimum number of probes for partial probing of a
+- `variable_probe_min_count` - Minimum number of probes for partial probing of a
   bed mesh.
-* `variable_probe_count_scale` - Scaling factor to increase probe count for
-   partial bed probes.
+- `variable_probe_count_scale` - Scaling factor to increase probe count for
+  partial bed probes.
 
 > **Note:** See the [optional section](#bed-mesh) for additional macros.
 
 > **Note:** The bed mesh optimizations are silently disabled for delta printers.
 
 > **Note:** If the `bed_mesh` config includes a [`relative_reference_index`
-  ](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index) then
-  the index point selected in the optimized mesh will be the point closest to
-  the index point in the mesh from the config. However, if a
-  `RELATIVE_REFERENCE_INDEX` parameter is supplied directly to this macro it
-  will be used unmodified.
+> ](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index) then
+> the index point selected in the optimized mesh will be the point closest to
+> the index point in the mesh from the config. However, if a
+> `RELATIVE_REFERENCE_INDEX` parameter is supplied directly to this macro it
+> will be used unmodified.
 
 `BED_MESH_CHECK`
 
-* `ABORT` - Set to a non-zero value to abort macro processing on an error.
-* `MESH_MIN` - See Klipper documentation for `BED_MESH_CALIBRATE`.
-* `MESH_MAX` - See Klipper documentation for `BED_MESH_CALIBRATE`.
+- `ABORT` - Set to a non-zero value to abort macro processing on an error.
+- `MESH_MIN` - See Klipper documentation for `BED_MESH_CALIBRATE`.
+- `MESH_MAX` - See Klipper documentation for `BED_MESH_CALIBRATE`.
 
 Checks the `[bed_mesh]` config and optionally supplied parameters. Will warn
 (or optionally abort) if `mesh_min` or `mesh_max` could allow a move out of
@@ -496,7 +493,7 @@ Provides a set of macros for selecting different bed surfaces with
 corresponding Z offset adjustments to compensate for their thickness. All
 available surfaces must be listed in the `variable_bed_surfaces` array.
 Corresponding LCD menus for sheet selection and babystepping will be added to
-*Setup* and *Tune* if [`lcd_menus.cfg`](#lcd-menus) is included. Any Z offset
+_Setup_ and _Tune_ if [`lcd_menus.cfg`](#lcd-menus) is included. Any Z offset
 adjustments made in the LCD menus, console, or other clients (e.g. Mainsail,
 Fluidd) will be applied to the current sheet and persisted across restarts.
 
@@ -506,13 +503,13 @@ Adjusts surface offsets to account for changes in the Z endstop position or
 probe Z offset. A message to invoke this command will be shown in the console
 when a relevant change is made to `printer.cfg`.
 
-* `IGNORE` - Set to 1 to reset the saved offsets without adjusting the surfaces.
+- `IGNORE` - Set to 1 to reset the saved offsets without adjusting the surfaces.
 
 #### `LOAD_SURFACE_MESH`
 
 Attempts to load a mesh associated with the specified surface.
 
-* `SURFACE` *(default: current surface)* - Bed surface.
+- `SURFACE` _(default: current surface)_ - Bed surface.
 
 #### `MAKE_SURFACE_MESH`
 
@@ -521,17 +518,17 @@ Generates a mesh associated with the specified surface. If
 this mesh when the surface is selected (and skip the mesh leveling step if it
 was specified).
 
-* `BED` - *(default: 70)* Bed temperature when probing the bed.
-* `EXTRUDER` - *(default: `variable_start_extruder_probing_temp`)* Extruder
+- `BED` - _(default: 70)_ Bed temperature when probing the bed.
+- `EXTRUDER` - _(default: `variable_start_extruder_probing_temp`)_ Extruder
   temperature when probing the bed.
-* `SURFACE` *(default: current surface)* - Bed surface.
-* `MESH_MULTIPLIER` *(default: 2)* - Increases the mesh density by the specified
+- `SURFACE` _(default: current surface)_ - Bed surface.
+- `MESH_MULTIPLIER` _(default: 2)_ - Increases the mesh density by the specified
   integer value while preserving the existing mesh points and relative reference
   index. A value of `1` leaves the mesh unmodified, `2` doubles the density, `3`
   triples it, etc. (I.e. if `bed_mesh` specifies `probe_count: 5,5` and
   `MESH_MULTIPLIER=2` then this macro will generate a 9x9 grid, whereas
   `MESH_MULTIPLIER=3` will generate a 13x13 grid.)
-* *See Klipper `BED_MESH_CALIBRATE` documentation for additional arguments.*
+- _See Klipper `BED_MESH_CALIBRATE` documentation for additional arguments._
 
 #### `SET_SURFACE_ACTIVE`
 
@@ -540,7 +537,7 @@ Sets the provided surface active (from one listed in listed in
 offset for the surface. If no `SURFACE` argument is provided the available
 surfaces are listed, with active surface preceded by a `*`.
 
-* `SURFACE` - Bed surface with an associated offset.
+- `SURFACE` - Bed surface with an associated offset.
 
 #### `SET_SURFACE_OFFSET`
 
@@ -548,8 +545,8 @@ Directly sets the the Z offset of `SURFACE` to the value of `OFFSET`. If no
 argument for `SURFACE` is provided the current active surface is used. If no
 argument for `OFFSET` is provided the current offset is displayed.
 
-* `OFFSET` - New Z offset for the given surface.
-* `SURFACE` *(default: current surface)* - Bed surface.
+- `OFFSET` - New Z offset for the given surface.
+- `SURFACE` _(default: current surface)_ - Bed surface.
 
 > **Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
 > offset for the active surface. This makes the bed surface work with Z offset
@@ -564,8 +561,8 @@ present). This command causes the speaker to emit an audible tone.
 
 Emits an audible tone.
 
-* `P` *(default: `100`)* - Duration of tone (in milliseconds).
-* `S` *(default: `1000`)* - Frequency of tone.
+- `P` _(default: `100`)_ - Duration of tone (in milliseconds).
+- `S` _(default: `1000`)_ - Frequency of tone.
 
 ### Draw
 
@@ -579,12 +576,12 @@ Provides convenience methods for extruding along a path and drawing purge lines.
 Extrudes a line of filament at the specified height and width from the current
 coordinate to the supplied XY coordinate (using the currently active extruder).
 
-* `X` *(default: current X position)* - Absolute X coordinate to draw to.
-* `Y` *(default: current Y position)* - Absolute Y coordinate to draw to.
-* `HEIGHT` *(default: set via `SET_DRAW_PARAMS`)* - Height (in mm) used to
+- `X` _(default: current X position)_ - Absolute X coordinate to draw to.
+- `Y` _(default: current Y position)_ - Absolute Y coordinate to draw to.
+- `HEIGHT` _(default: set via `SET_DRAW_PARAMS`)_ - Height (in mm) used to
   calculate extrusion volume.
-* `WIDTH` *(default: set via `SET_DRAW_PARAMS`)* - Extrusion width in mm.
-* `FEEDRATE` *(default: set via `SET_DRAW_PARAMS`)* - Drawing feedrate in mm/m.
+- `WIDTH` _(default: set via `SET_DRAW_PARAMS`)_ - Extrusion width in mm.
+- `FEEDRATE` _(default: set via `SET_DRAW_PARAMS`)_ - Drawing feedrate in mm/m.
 
 > **Note:** The Z axis position must be set prior to caling this macro. The
 > `HEIGHT` parameter is used only to calculate the extrusion volume.
@@ -595,10 +592,10 @@ Sets the default parameters used by DRAW_LINE_TO. This is helpful in reducing
 `DRAW_LINE_TO` command line lengths (particluarly important when debugging in
 the console).
 
-* `HEIGHT` *(optional; 0.2mm at startup)* - Height (in mm) used to
+- `HEIGHT` _(optional; 0.2mm at startup)_ - Height (in mm) used to
   calculate extrusion volume.
-* `WIDTH` *(optional; nozzle diameter at startup)* - Extrusion width in mm.
-* `FEEDRATE` *(optional; 1200mm/m at startup)*  - Drawing feedrate in mm/m.
+- `WIDTH` _(optional; nozzle diameter at startup)_ - Extrusion width in mm.
+- `FEEDRATE` _(optional; 1200mm/m at startup)_ - Drawing feedrate in mm/m.
 
 #### DRAW_PURGE_LINE
 
@@ -608,13 +605,13 @@ supplied print area. If no print area is specified the purge lines are drawn at
 the front edge of the maximum printable area. If no printable area is set it
 defaults to the respective axis limits.
 
-* `PRINT_MIN` *(default: `variable_print_min`)* - Upper boundary of print.
-* `PRINT_MAX` *(default: `variable_print_max`)* - Lower boundary of print.
-* `HEIGHT` *(default: 62.5% of nozzle diameter)* - Extrusion height in mm.
-* `WIDTH` *(default: 125% of nozzle diameter)* - Extrusion width in mm.
-* `LENGTH` *(default: `variable_start_purge_length`)* - Length of filament
-  to purge. *The default in `variable_start_purge_length` is also the amount
-  that is automatically purged at print start.*
+- `PRINT_MIN` _(default: `variable_print_min`)_ - Upper boundary of print.
+- `PRINT_MAX` _(default: `variable_print_max`)_ - Lower boundary of print.
+- `HEIGHT` _(default: 62.5% of nozzle diameter)_ - Extrusion height in mm.
+- `WIDTH` _(default: 125% of nozzle diameter)_ - Extrusion width in mm.
+- `LENGTH` _(default: `variable_start_purge_length`)_ - Length of filament
+  to purge. _The default in `variable_start_purge_length` is also the amount
+  that is automatically purged at print start._
 
 > **Note:** You must set `variable_print_min` and `variable_print_max` if the
 > X and Y axis limits in your config allow your toolhead to move outside the
@@ -633,20 +630,20 @@ this happens at the start and end of the print).
 
 Sets scaling parameters for the extruder fan.
 
-* `BOOST` *(default: `0`)* - Added to the fan speed.
-* `SCALE` *(default: `1.0`)* - The `BOOST` value is added an then the fan
+- `BOOST` _(default: `0`)_ - Added to the fan speed.
+- `SCALE` _(default: `1.0`)_ - The `BOOST` value is added an then the fan
   speed is multiplied by `SCALE`.
-* `MAXIMUM` *(default: `255`)* - The fan speed is clamped to no larger
+- `MAXIMUM` _(default: `255`)_ - The fan speed is clamped to no larger
   than `MAXIMUM`.
-* `MINIMUM` *(default: `0`)* - The fan speed is clamped to no less
+- `MINIMUM` _(default: `0`)_ - The fan speed is clamped to no less
   than `MINIMUM`; if this is a non-zero value the fan can be stopped only via
   the M107 command.
-* `SPEED` *(optional)* - This specifies a new speed target, otherwise any new
+- `SPEED` _(optional)_ - This specifies a new speed target, otherwise any new
   adjustments will be applied to the unadjusted value of the last set fan speed.
 
 #### `RESET_FAN_SCALING`
 
-* Clears all existing fan scaling factors.
+- Clears all existing fan scaling factors.
 
 ### Filament
 
@@ -654,16 +651,16 @@ Sets scaling parameters for the extruder fan.
 
 Loads or unloads filament to the nozzle.
 
-* `LENGTH` *(default: `variable_load_length`)* - The length of filament to load
+- `LENGTH` _(default: `variable_load_length`)_ - The length of filament to load
   or unload.
-* `SPEED` *(default: `variable_load_speed`)* - Speed (in mm/m) to feed the
+- `SPEED` _(default: `variable_load_speed`)_ - Speed (in mm/m) to feed the
   filament.
-* `MINIMUM` *(default: `variable_load_min_temp`)* - Ensures the extruder is heated
-   to at least the specified temperature.
+- `MINIMUM` _(default: `variable_load_min_temp`)_ - Ensures the extruder is heated
+  to at least the specified temperature.
 
 #### Marlin Compatibility
 
-* The `M701` and `M702` commands are implemented with a default filament length
+- The `M701` and `M702` commands are implemented with a default filament length
   of `variable_load_length`.
 
 ### Heaters
@@ -679,17 +676,17 @@ Sets scaling parameters for the specified heater. If run without any arguments
 any currently scaled heaters and thier scaling parameters will be listed. By
 default the scaling is cleared at the start and end of a print.
 
-* `HEATER` - The name of the heater to scale.
-* `BOOST` *(default: `0.0`)* - Added to a non-zero target temperature.
-* `SCALE` *(default: `1.0`)* - Multiplied with the boosted target
+- `HEATER` - The name of the heater to scale.
+- `BOOST` _(default: `0.0`)_ - Added to a non-zero target temperature.
+- `SCALE` _(default: `1.0`)_ - Multiplied with the boosted target
   temperature.
-* `MAXIMUM` *(default: `max_temp`)* - The target temperature is clamped
+- `MAXIMUM` _(default: `max_temp`)_ - The target temperature is clamped
   to no larger than `MAXIMUM`. This value must be between `min_temp` and
   `min_temp`, inclusive.
-* `MINIMUM` *(default: `min_temp`)* - A non-zero target temperature is
+- `MINIMUM` _(default: `min_temp`)_ - A non-zero target temperature is
   clamped to no less than `MINIMUM`. This value must be between `min_temp` and
   `min_temp`, inclusive.
-* `TARGET` *(optional)* - This specifies a new target temperature, otherwise any
+- `TARGET` _(optional)_ - This specifies a new target temperature, otherwise any
   new adjustments will be applied to the unadjusted value of the last set target
   temperature.
 
@@ -700,7 +697,7 @@ default the scaling is cleared at the start and end of a print.
 
 Clears current heater scaling.
 
-* `HEATER` *(optional)* - The name of the heater to reset.
+- `HEATER` _(optional)_ - The name of the heater to reset.
 
 > **Note:** if no HEATER argument is specified scaling parameters will be reset
 > for all heaters.
@@ -717,16 +714,16 @@ same and the function is identical, except that scaling values are applied.
 
 #### Marlin Compatibility
 
-* The chamber heating commands `M141` and `M191` are implemented if a
+- The chamber heating commands `M141` and `M191` are implemented if a
   corresponding `[heater_generic chamber]` section is defined in the config.
-* The `R` temperature parameter from Marlin is implemented for the `M109` and
+- The `R` temperature parameter from Marlin is implemented for the `M109` and
   `M190` commands. This parameter will cause a wait until the target temperature
   stabilizes (i.e. the normal Klipper behavior for `S`).
-* The `S` parameter for the  `M109` and `M190` commands is altered to behave as
+- The `S` parameter for the `M109` and `M190` commands is altered to behave as
   it does in Marlin. Rather than causing a wait until the temperature
   stabilizes, the wait will complete as soon as the temperature target is
   exceeded.
-* The `M109`, `M190`, `M191`, `M104`, `M140`, and `M141` are all overridden to
+- The `M109`, `M190`, `M191`, `M104`, `M140`, and `M141` are all overridden to
   implement the heater scaling described above.
 
 > **Note:** Both `SET_HEATER_TEMPERATURE` and `TEMPERATURE_WAIT` are **not**
@@ -746,20 +743,20 @@ when the `O` argument is included (equivalent to the same argument in Marlin).
 See Klipper `G28` documentation for general information and detail on the other
 arguments.
 
-* `O` - Omits already homed axes from the homing procedure.
+- `O` - Omits already homed axes from the homing procedure.
 
 > **Note:** If you have a `[homing_override]` section you will need to update
 > any `G28` commands in the gcode part to use `G28.6245197` instead (which is
 > the renamed version of Klipper's built-in `G28`). Failure to do this will
-> cause `G28` commands to error out with the message ***Macro G28 called
-> recursively***.
+> cause `G28` commands to error out with the message **_Macro G28 called
+> recursively_**.
 
 #### `LAZY_HOME`
 
 Homes the specified axes; by default omits any axes that are already homed.
 
-* `AXES` *(default: XYZ)* - List of axes to home.
-* `LAZY` *(default: 1)* - Omits already homed axes from the homing procedure.
+- `AXES` _(default: XYZ)_ - List of axes to home.
+- `LAZY` _(default: 1)_ - Omits already homed axes from the homing procedure.
 
 ### Layer Triggers
 
@@ -772,14 +769,14 @@ Runs abritrary, user-provided g-code commands at the user-specified layer or
 height. If no arguments are specified it will display all currently scheduled
 g-code commands along with their associated layer or height.
 
-* `HEIGHT` - Z height (in mm) to run the command. Exactly one of `HEIGHT` or
+- `HEIGHT` - Z height (in mm) to run the command. Exactly one of `HEIGHT` or
   `LAYER` must be specified.
-* `LAYER` - Layer number (zero indexed) to run the command. Exactly one of
+- `LAYER` - Layer number (zero indexed) to run the command. Exactly one of
   `HEIGHT` or `LAYER` must be specified. The special value `next` may be
   specified run the command at the next layer change.
-* `COMMAND` - The command to run at layer change. Take care to properly quote
+- `COMMAND` - The command to run at layer change. Take care to properly quote
   spaces and escape any special characters.
-* `CANCEL` *(default: `0`)* - Cancel the commands previously scheduled at the
+- `CANCEL` _(default: `0`)_ - Cancel the commands previously scheduled at the
   given layer or height. If no `COMMAND` argument is provided all commands at
   the specified `LAYER` or `HEIGHT` are cancelled.
 
@@ -789,23 +786,23 @@ Cancels all g-code commands previously scheduled at any layer or height.
 
 #### Convenient Layer Change Macros
 
-* `PAUSE_NEXT_LAYER ...`
-  * Schedules the current print to pause at the next layer change. See
+- `PAUSE_NEXT_LAYER ...`
+  - Schedules the current print to pause at the next layer change. See
     [`PAUSE`](#pause) macro for additional arguments.
-* `PAUSE_AT_LAYER  { HEIGHT=<pos> | LAYER=<layer> } ...`
-  * Schedules the current print to pause at the specified layer change.
+- `PAUSE_AT_LAYER  { HEIGHT=<pos> | LAYER=<layer> } ...`
+  - Schedules the current print to pause at the specified layer change.
     See [`PAUSE`](#pause) for additional arguments.
-* `SPEED_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } SPEED=<percentage>`
-  * Schedules a feedrate adjustment at the specified layer change. (`SPEED`
+- `SPEED_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } SPEED=<percentage>`
+  - Schedules a feedrate adjustment at the specified layer change. (`SPEED`
     parameter behaves the same as the `M220` `S` parameter.)
-* `FLOW_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } FLOW=<percentage>`
-  * Schedules a flow-rate adjustment at the specified layer change. (`FLOW`
+- `FLOW_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } FLOW=<percentage>`
+  - Schedules a flow-rate adjustment at the specified layer change. (`FLOW`
     parameter behaves the same as the `M221` `S` parameter.)
-* `FAN_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } ...`
-  * Schedules a fan adjustment at the specified layer change. See 
+- `FAN_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } ...`
+  - Schedules a fan adjustment at the specified layer change. See
     [`SET_FAN_SCALING`](#set_fan_scaling) for additional arguments.
-* `HEATER_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } ...`
-  * Schedules a heater adjustment at the specified layer change. See 
+- `HEATER_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } ...`
+  - Schedules a heater adjustment at the specified layer change. See
     [`SET_HEATER_SCALING`](#set_heater_scaling) for additional arguments.
 
 > **Note:** If any triggers cause an exception the current print will
@@ -821,18 +818,18 @@ Implements toolhead parking.
 
 Parks the toolhead.
 
-* `P` *(default: `2`)* - Parking mode
-  * `P=0` - If current Z-pos is lower than Z-park then the nozzle will be raised
+- `P` _(default: `2`)_ - Parking mode
+  - `P=0` - If current Z-pos is lower than Z-park then the nozzle will be raised
     to reach Z-park height
-  * `P=1` - No matter the current Z-pos, the nozzle will be raised/lowered to
+  - `P=1` - No matter the current Z-pos, the nozzle will be raised/lowered to
     reach Z-park height.
-  * `P=2` - The nozzle height will be raised by Z-park amount but never going
+  - `P=2` - The nozzle height will be raised by Z-park amount but never going
     over the machine’s Z height limit.
-* `X` *(default: `variable_park_x`)* - Absolute X parking coordinate.
-* `Y` *(default: `variable_park_y`)* - Absolute Y parking coordinate.
-* `Z` *(default: `variable_park_z`)* - Z parking coordinate applied according
+- `X` _(default: `variable_park_x`)_ - Absolute X parking coordinate.
+- `Y` _(default: `variable_park_y`)_ - Absolute Y parking coordinate.
+- `Z` _(default: `variable_park_z`)_ - Z parking coordinate applied according
   to the `P` parameter.
-* `LAZY` *(default: 1)* - Will home any unhomed axes if needed and will not
+- `LAZY` _(default: 1)_ - Will home any unhomed axes if needed and will not
   move any axis if already homed and parked (even if `P=2`).
 
 > **Note:** If a print is in progress the larger of the tallest printed layer or
@@ -841,7 +838,7 @@ Parks the toolhead.
 
 #### Marlin Compatibility
 
-* The `G27` command is implemented with a default `P0` argument.
+- The `G27` command is implemented with a default `P0` argument.
 
 ### Pause, Resume, Cancel
 
@@ -849,15 +846,15 @@ Parks the toolhead.
 
 Pauses the current print.
 
-* `X` *(default: `variable_park_x`)* - Absolute X parking coordinate.
-* `Y` *(default: `variable_park_y`)* - Absolute Y parking coordinate.
-* `Z` *(default: `variable_park_z`)* - Relative Z parking coordinate
-* `E` *(default: `5`)* - Retraction length to prevent ooze.
-* `B` *(default: `10`)* - Number of beeps to emit (if `M300` is enabled).
+- `X` _(default: `variable_park_x`)_ - Absolute X parking coordinate.
+- `Y` _(default: `variable_park_y`)_ - Absolute Y parking coordinate.
+- `Z` _(default: `variable_park_z`)_ - Relative Z parking coordinate
+- `E` _(default: `5`)_ - Retraction length to prevent ooze.
+- `B` _(default: `10`)_ - Number of beeps to emit (if `M300` is enabled).
 
 #### `RESUME`
 
-* `E` *(default: `5`)* - Retraction length to prevent ooze.
+- `E` _(default: `5`)_ - Retraction length to prevent ooze.
 
 #### `CANCEL_PRINT`
 
@@ -865,35 +862,34 @@ Cancels the print and performs all the same functions as `PRINT_END`.
 
 #### Marlin Compatibility
 
-* The `M24`, `M25`, `M600`, `M601`, and `M602` commands are all implemented by
+- The `M24`, `M25`, `M600`, `M601`, and `M602` commands are all implemented by
   wrapping the above commands.
-
 
 ### Print Start and End
 
 #### `PRINT_START`
 
 Sets up the printer prior to starting a print (called from the slicer's print
-start g-code). A target `CHAMBER` temperature may be provided if a 
+start g-code). A target `CHAMBER` temperature may be provided if a
 `[heater_generic chamber]` section is present in the klipper config.
 If `MESH_MIN` and `MESH_MAX` are provided, then `BED_MESH_CALIBRATE` will probe
 only the area within the specified rectangle, and will scale the number of
 probes to the appropriate density (this can dramatically reduce probe times for
 smaller prints).
 
-* `BED` - Bed heater starting temperature.
-* `EXTRUDER` - Extruder heater starting temperature.
-* `CHAMBER` *(optional)* - Chamber heater starting temperature.
-* `MESH_MIN` *(optional)* - Minimum x,y coordinate of the first layer.
-* `MESH_MAX` *(optional)* - Maximum x,y coordinate of the first layer.
-* `NOZZLE_SIZE` *(default: nozzle_diameter)* - Nozzle diameter of the primary
-   extruder.
-* `LAYERS` *(optional)* - Total number of layers in the print.
+- `BED` - Bed heater starting temperature.
+- `EXTRUDER` - Extruder heater starting temperature.
+- `CHAMBER` _(optional)_ - Chamber heater starting temperature.
+- `MESH_MIN` _(optional)_ - Minimum x,y coordinate of the first layer.
+- `MESH_MAX` _(optional)_ - Maximum x,y coordinate of the first layer.
+- `NOZZLE_SIZE` _(default: nozzle_diameter)_ - Nozzle diameter of the primary
+  extruder.
+- `LAYERS` _(optional)_ - Total number of layers in the print.
 
 These are the customization options you can add to your
 `[gcode_macro _km_options]` section to alter `PRINT_START` behavior:
 
-* `variable_start_bed_heat_delay` *(default: 2000)* - This delay (in
+- `variable_start_bed_heat_delay` _(default: 2000)_ - This delay (in
   microseconds) is used to allow the bed to stabilize after it reaches it's
   target temperature. This is present to account for the fact that the
   temperature sensors for most beds are located close to the heating element,
@@ -902,7 +898,7 @@ These are the customization options you can add to your
   For smaller or thinner beds you may want to disable this entirely by setting
   it to `0`.
 
-* `variable_start_bed_heat_overshoot` *(default: 2.0)* - This value (in degrees
+- `variable_start_bed_heat_overshoot` _(default: 2.0)_ - This value (in degrees
   Celsius) is added to the supplied target bed temperature and use as the
   initial target temperature when preheating the bed. After the bed preheats to
   this target it there is a brief delay before the final target is set. This
@@ -910,55 +906,53 @@ These are the customization options you can add to your
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
 
-* `variable_start_end_park_y` *(default: `max`)* - The final Y position of the
+- `variable_start_end_park_y` _(default: `max`)_ - The final Y position of the
   toolhead in the `PRINT_END` macro, to ensure that the toolhead is out of the
   way when the bed is presented for print removal. This can be set to a Y
   coordinate (e.g. `0.0`), `max` to use `stepper_y.position_max`, or `min` to
   use `stepper_y.position_min`.
 
-* `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
+- `variable_start_extruder_preheat_scale` _(default: 0.5)_ - This value is
   multiplied by the target extruder temperature and the result is used as the
   preheat value for the extruder while the bed is heating. This is done to
   reduce oozing from the extruder while the bed is heating or being probed. Set
   to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
   to not preheat the extruder at all until the bed reaches temperature.
 
-* `variable_start_extruder_probing_temp` *(default: 0)* - If set to a non-zero
+- `variable_start_extruder_probing_temp` _(default: 0)_ - If set to a non-zero
   value the extruder will be stabilized at the supplied temperature prior to bed
-  probing. This is useful for [Voron TAP](
-  https://github.com/VoronDesign/Voron-Tap), load cells, and other forms of
+  probing. This is useful for [Voron TAP](https://github.com/VoronDesign/Voron-Tap), load cells, and other forms of
   probing that use the nozzle directly. When this value is provided
   `variable_start_extruder_preheat_scale` is ignored.
 
-* `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
-  )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
-  #bed-mesh-improvements) after the bed has stabilized at its target
+- `variable_start_level_bed_at_temp` _(default: True if `bed_mesh` configured
+  )_ - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](#bed-mesh-improvements) after the bed has stabilized at its target
   temperature.
 
-* `variable_start_home_z_at_temp` *(default: True if `probe:z_virtual_endstop`
-  configured)* - Rehomes the Z axis once the bed reaches its target temperature,
+- `variable_start_home_z_at_temp` _(default: True if `probe:z_virtual_endstop`
+  configured)_ - Rehomes the Z axis once the bed reaches its target temperature,
   to account for movement during heating.
 
-* `variable_start_clear_adjustments_at_end` *(default: True)* - Clears temporary
+- `variable_start_clear_adjustments_at_end` _(default: True)_ - Clears temporary
   adjustments after the print completes or is cancelled (e.g. feedrate,
   flow percentage).
 
-* `variable_start_purge_clearance` *(default: 5.0)* - Distance (in millimeters)
+- `variable_start_purge_clearance` _(default: 5.0)_ - Distance (in millimeters)
   between the purge lines and the print area (if a `start_purge_length` is
   provided).
 
-* `variable_start_purge_length` *(default: 0.0)* - Length of filament (in
+- `variable_start_purge_length` _(default: 0.0)_ - Length of filament (in
   millimeters) to purge after the extruder finishes heating and prior to
   starting the print. For most setups `30` is a good starting point.
 
-* `variable_start_purge_prime_length` *(default: 10.0)* - Length of filament (in
+- `variable_start_purge_prime_length` _(default: 10.0)_ - Length of filament (in
   millimeters) to prime the extruder before drawing the purge lines.
 
-* `variable_start_quad_gantry_level_at_temp` *(default: True if
-  `quad_gantry_level` configured)* - If true the `PRINT_START` macro will run
-  `QUAD_GANTRY_LEVEL` after the bed has stabilized at its target temperature.
+- `variable_start_screws_tilt_calculate_at_temp` _(default: True if
+  `screws_tilt_calculate` configured)_ - If true the `PRINT_START` macro will run
+  `screws_tilt_calculate` after the bed has stabilized at its target temperature.
 
-* `variable_start_random_placement_max` *(default: 0)* - A positive value
+- `variable_start_random_placement_max` _(default: 0)_ - A positive value
   specifies the +/- distance in the XY axes that the print can be randomly
   relocated (assuming the bed has sufficient space). This can help reduce bed
   wear from repeatedly printing in the same spot. Note that this feature
@@ -966,21 +960,20 @@ These are the customization options you can add to your
   relocated print. As such, `START_PRINT` must have valid `MESH_MIN`/`MESH_MAX`
   parameters, and either `MODEL_MIN`/`MODEL_MAX` must be set or the print file
   must include `EXCLUDE_OBJECT_DEFINE` statements with `POLYGON` lists that
-  define the bounds of the objects ([see `exclude_object` for more information](
-  https://www.klipper3d.org/Exclude_Object.html)).
+  define the bounds of the objects ([see `exclude_object` for more information](https://www.klipper3d.org/Exclude_Object.html)).
 
-* `variable_start_random_placement_padding` *(default: 10.0)* - The minimum
+- `variable_start_random_placement_padding` _(default: 10.0)_ - The minimum
   distance the relocated print will be placed from the printable edge of the
   bed.
 
-* `variable_start_try_saved_surface_mesh` *(default: False)* - If enabled and
+- `variable_start_try_saved_surface_mesh` _(default: False)_ - If enabled and
   `bed_mesh.profiles` contains a matching mesh for the currently select bed
   surface, then the mesh will be loaded from the saved profile (and
   [`BED_MESH_CALIBRATE_FAST`](#bed-mesh-improvements) will be skipped if
   it would have been run otherwise).
 
-* `variable_start_z_tilt_adjust_at_temp`  *(default: True if `z_tilt`
-  configured)* - If true the `PRINT_START` macro will run `Z_TILT_ADJUST` after
+- `variable_start_z_tilt_adjust_at_temp` _(default: True if `z_tilt`
+  configured)_ - If true the `PRINT_START` macro will run `Z_TILT_ADJUST` after
   the bed has stabilized at its target temperature.
 
 You can further customize the `PRINT_START` macro by declaring your own override
@@ -1002,9 +995,9 @@ gcode:
 ```
 
 > **Note:** You can use this same pattern to wrap other macros in order to
-  account for customizations specific to your printer. E.g. If you have a
-  dockable probe you may choose to wrap `BED_MESH_CALIBRATE` with the
-  appropriate docking/undocking commands.
+> account for customizations specific to your printer. E.g. If you have a
+> dockable probe you may choose to wrap `BED_MESH_CALIBRATE` with the
+> appropriate docking/undocking commands.
 
 #### `PRINT_START` Phases
 
@@ -1013,15 +1006,15 @@ This approach allows for pausing or cancelling, and inserting custom gcode
 between the phases (e.g. to set status LEDs, deploy/dock probes, load filament).
 The phases are described in order below:
 
-* `_PRINT_START_PHASE_INIT` - Initializes the `PRINT_START` settings, and begins
+- `_PRINT_START_PHASE_INIT` - Initializes the `PRINT_START` settings, and begins
   heating the bed and chamber.
-* `_PRINT_START_PHASE_PREHEAT` - Stabilizes the bed and (if applicable) chamber
+- `_PRINT_START_PHASE_PREHEAT` - Stabilizes the bed and (if applicable) chamber
   at the target temperatures. Also homes the axes while heating is in progress.
-* `_PRINT_START_PHASE_PROBING` - Performs probing operations, including mesh
+- `_PRINT_START_PHASE_PROBING` - Performs probing operations, including mesh
   bed calibration, quad gantry leveling, etc.
-* `_PRINT_START_PHASE_EXTRUDER` - Stabilizes the extruder at the target
+- `_PRINT_START_PHASE_EXTRUDER` - Stabilizes the extruder at the target
   temperature.
-* `_PRINT_START_PHASE_PURGE` - Extrudes a purge line in front of the print area.
+- `_PRINT_START_PHASE_PURGE` - Extrudes a purge line in front of the print area.
 
 #### `PRINT_END`
 
@@ -1041,44 +1034,44 @@ The following events are fired during during the printing process, and the
 custom gcode can be used to set LEDs, emit beeps, or perform any other
 operations you may want to run at a given status in the printing process.
 
-* `ready` - Printer is ready to receive a job
-* `filament_load` - Loading filament
-* `filament_unload` - Unloading filament
-* `bed_heating` - Waiting for the bed to reach target
-* `chamber_heating` - Waiting for the chamber to reach target
-* `homing` - Homing any axis
-* `leveling_gantry` - Performing quad gantry-leveling
-* `calibrating_z` - Performing z-tilt adjustment
-* `meshing` - Calibrating a bed mesh
-* `extruder_heating` - Waiting for the extruder to reach target
-* `purging` - Printing purge line
-* `printing` - Actively printing
-* `pausing` - Print is paused
-* `cancelling` - Print is being cancelled
-* `completing` - Print completing (does not fire on a cancelled print)
+- `ready` - Printer is ready to receive a job
+- `filament_load` - Loading filament
+- `filament_unload` - Unloading filament
+- `bed_heating` - Waiting for the bed to reach target
+- `chamber_heating` - Waiting for the chamber to reach target
+- `homing` - Homing any axis
+- `leveling_gantry` - Performing quad gantry-leveling
+- `calibrating_z` - Performing z-tilt adjustment
+- `meshing` - Calibrating a bed mesh
+- `extruder_heating` - Waiting for the extruder to reach target
+- `purging` - Printing purge line
+- `printing` - Actively printing
+- `pausing` - Print is paused
+- `cancelling` - Print is being cancelled
+- `completing` - Print completing (does not fire on a cancelled print)
 
 #### `GCODE_ON_PRINT_STATUS`
 
 Associates a gcode command with a specific status and sets the parameters for
 when and how the status event fires.
 
-* `STATUS` - A comma seperated list of status events this command is associated
+- `STATUS` - A comma seperated list of status events this command is associated
   with. Passing the value `all` will associate the gcode with all statuses.
-* `COMMAND` - The text of the command.
-* `ARGS` *(default: `0`)* - Set to `1` to enable passing the following status
+- `COMMAND` - The text of the command.
+- `ARGS` _(default: `0`)_ - Set to `1` to enable passing the following status
   arguments to the macro: `TYPE`, `WHEN`, `LAST_STATUS`, and `NEXT_STATUS`.
   This is useful if calling a custom macro that determines its behavior based
   on the exact details of the state transition.
-* `FILTER_ENTER` - An optional list of statuses that, if provided, will prevent
+- `FILTER_ENTER` - An optional list of statuses that, if provided, will prevent
   the command from firing unless the last status matches a status in the list.
-* `FILTER_LEAVE` - An optional list of statuses that, if provided, will prevent
+- `FILTER_LEAVE` - An optional list of statuses that, if provided, will prevent
   the command from firing unless the next status matches a status in the list.
-* `TYPE` *(default: `ENTER`)* - If set to `ENTER` the command is run when
+- `TYPE` _(default: `ENTER`)_ - If set to `ENTER` the command is run when
   entering the specified status. If set to `LEAVE` the command is run when
   leaving the specified status. If set to `BOTH` the command is run when
   entering and leaving. The `LEAVE` commands are processed first, followed by
   the `ENTER` commands, all in the order they were originally set.
-* `WHEN` *(default: `PRINTING`)* - Set to `PRINTING` to fire the status event
+- `WHEN` _(default: `PRINTING`)_ - Set to `PRINTING` to fire the status event
   only when printing, `IDLE` when not printing, and `ALWAYS` for both.
 
 #### Print Status Event Example
@@ -1087,9 +1080,9 @@ Below is a simple example of how to set up a status event config. The calls to
 `GCODE_ON_PRINT_STATUS` are placed in the `gcode` of the
 `[gcode_macro _km_options]` config section, so that they will be run once at
 printer start. When the printer enters the `ready` state at startup the command
-will echo *` TYPE=LEAVE WHEN=IDLE LAST_STATUS=none NEXT_STATUS=ready`* to the
+will echo _` TYPE=LEAVE WHEN=IDLE LAST_STATUS=none NEXT_STATUS=ready`_ to the
 console, and when it leaves the `ready` state to begin printing it will echo
-*`TYPE=ENTER WHEN=PRINTING LAST_STATUS=ready NEXT_STATUS=homing`*.
+_`TYPE=ENTER WHEN=PRINTING LAST_STATUS=ready NEXT_STATUS=homing`_.
 
 ```
 [gcode_macro _km_options]
@@ -1110,11 +1103,11 @@ related commands, such as accelleration, jerk, and linear advance.
 
 #### Marlin Compatibility
 
-* The `M201`, `M203`, `M204`, and `M205` commands are implemented by calling
+- The `M201`, `M203`, `M204`, and `M205` commands are implemented by calling
   Klipper's `SET_VELOCITY_LIMIT` command.
-* The `M900` command is implemented by calling Klipper's `SET_PRESSURE_ADVANCE`
+- The `M900` command is implemented by calling Klipper's `SET_PRESSURE_ADVANCE`
   command. The `K` factor is scaled by `variable_pressure_advance_scale`
-  *(default: `-1.0`)*. If the scaling value is negative the `M900` command has no
+  _(default: `-1.0`)_. If the scaling value is negative the `M900` command has no
   effect.
 
 ## Optional Configs
@@ -1126,13 +1119,13 @@ related commands, such as accelleration, jerk, and linear advance.
 Overrides the default `BED_MESH_CALIBRATE` to use `BED_MESH_CALIBRATE_FAST`
 instead, and adds the `G29` command.
 
-***Configuration:***
+**_Configuration:_**
 
 ```
 [include klipper-macros/optional/bed_mesh.cfg]
 ```
 
-***Requirements:** A properly configured `bed_mesh` section.*
+**\*Requirements:** A properly configured `bed_mesh` section.\*
 
 ### LCD Menus
 
@@ -1140,30 +1133,30 @@ Adds relevant menu items to an LCD display and improves some existing
 functionality. See the [customization](#customization) section above for more
 information on how to configure specific behaviors.
 
-* Confirmation added for cancelling the print or disabling steppers during a
+- Confirmation added for cancelling the print or disabling steppers during a
   print.
-* Several temperature menu changes:
-  * Up to 10 filaments and their corresponding temperatures can be set via
-   `variable_menu_temperature`.
-  * Per filament chamber temperature controls are available if a 
+- Several temperature menu changes:
+  - Up to 10 filaments and their corresponding temperatures can be set via
+    `variable_menu_temperature`.
+  - Per filament chamber temperature controls are available if a
     `[heater_generic chamber]` section is configured.
-  * The cooldown commands are moved to the top level temperature menu.
-* The filament loading commands are replaced with macros that use the lengths
+  - The cooldown commands are moved to the top level temperature menu.
+- The filament loading commands are replaced with macros that use the lengths
   and speeds specified in `variable_load_length` and `variable_load_speed`,
   which includes a priming phase at the end of the load (controlled via
   `variable_load_priming_length` and `variable_load_priming_speed`).
-* [Bed surface](#bed-surface) management is integrated into the setup and tuning
+- [Bed surface](#bed-surface) management is integrated into the setup and tuning
   menus.
-* The SD card menu has been streamlined for printing and non-printing modes.
-* The setup menu includes host shutdown, host restart, speed, and flow controls.
-* You can hide the Octoprint or SD card menus if you don't use them 
+- The SD card menu has been streamlined for printing and non-printing modes.
+- The setup menu includes host shutdown, host restart, speed, and flow controls.
+- You can hide the Octoprint or SD card menus if you don't use them
   (via `variable_menu_show_octoprint` and `variable_menu_show_sdcard`,
   respectively).
 
-***Configuration:***
+**_Configuration:_**
 
 ```
 [include klipper-macros/optional/lcd_menus.cfg]
 ```
 
-***Requirements:** A properly configured `display` section.*
+**\*Requirements:** A properly configured `display` section.\*
